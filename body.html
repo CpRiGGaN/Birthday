@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Sunshine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-intro: #FAF7F2;
+            --bg-main: #F4F1EA;
+            --text-dark: #2C2A28;
+            --text-light: #7A7571;
+            --sun-core: #FFB347;
+            --sun-glow: #FFD180;
+            --panel-bg: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-intro);
+            color: var(--text-dark);
+            transition: background-color 1s ease;
+        }
+
+        /* --- ЭКРАН 1: СОЛНЦЕ --- */
+        #screen-intro {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .sun-button {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--sun-glow), var(--sun-core));
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 40px rgba(255, 179, 71, 0.4), 0 0 80px rgba(255, 209, 128, 0.2);
+            transition: box-shadow 0.3s ease;
+            animation: breathe 3s ease-in-out infinite;
+            position: relative;
+            z-index: 11;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255, 179, 71, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(255, 179, 71, 0.6); }
+        }
+
+        .sun-button.clicked {
+            animation: expandSun 1.2s cubic-bezier(0.64, 0.04, 0.35, 1) forwards;
+        }
+
+        @keyframes expandSun {
+            0% { transform: scale(1); }
+            100% { transform: scale(50); opacity: 0; }
+        }
+
+        .intro-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            color: var(--text-light);
+            margin-top: 40px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards 0.5s;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* --- ЭКРАН 2: ПАНЕЛИ --- */
+        #screen-main {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 5;
+            transition: opacity 1s ease 0.3s;
+        }
+
+        #screen-main.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .panels-container {
+            display: flex;
+            gap: 24px;
+            transform: translateY(30px);
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.4s;
+        }
+
+        #screen-main.visible .panels-container {
+            transform: translateY(0);
+        }
+
+        .panel {
+            width: 360px;
+            height: 580px;
+            background-color: var(--panel-bg);
+            box-shadow: 0 20px 40px rgba(44, 42, 40, 0.05);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 4px;
+        }
+
+        /* Левая панель */
+        .panel-left {
+            justify-content: space-between;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 400px;
+            background-color: #F8F7F4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #BDB9B5;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .player {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 24px;
+            border-top: 1px solid #EFECE7;
+        }
+
+        .track-info {
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .play-btn {
+            background: none;
+            border: 1px solid var(--text-dark);
+            color: var(--text-dark);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 10px;
+        }
+
+        .play-btn:hover {
+            background: var(--text-dark);
+            color: var(--panel-bg);
+        }
+
+        /* Правая панель */
+        .panel-right {
+            justify-content: center;
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 400;
+            color: var(--text-dark);
+            margin-bottom: 32px;
+            line-height: 1.1;
+        }
+
+        .text-body {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-light);
+            font-weight: 300;
+        }
+
+        .text-body p {
+            margin-bottom: 24px;
+        }
+
+        .signature {
+            margin-top: 30px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 18px;
+            color: var(--sun-core);
+        }
+
+        @media (max-width: 768px) {
+            .panels-container {
+                flex-direction: column;
+                height: 100vh;
+                width: 100vw;
+                gap: 0;
+                overflow-y: auto;
+            }
+            .panel {
+                width: 100%;
+                height: auto;
+                min-height: 50vh;
+                border-radius: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- СЦЕНА 1: СОЛНЦЕ -->
+    <div id="screen-intro">
+        <div class="sun-button" id="sun-btn" onclick="openCard()"></div>
+        <div class="intro-text" id="intro-text">For my sunshine</div>
+    </div>
+
+    <!-- СЦЕНА 2: ПАНЕЛИ -->
+    <div id="screen-main">
+        <div class="panels-container">
+            
+            <div class="panel panel-left">
+                <div class="photo-placeholder">
+                    <!-- Чтобы добавить фото, раскомментируй строку ниже и вставь путь к изображению -->
+                    <!-- <img src="1.jpg" alt="Photo"> -->
+                    Insert Photo
+                </div>
+                
+                <div class="player">
+                    <div class="track-info">Modern Talking</div>
+                    <button class="play-btn" id="play-btn" onclick="toggleAudio()">▶</button>
+                </div>
+            </div>
+
+            <div class="panel panel-right">
+                <h1 class="title">Бубочка,</h1>
+                <div class="text-body">
+                    <p>Сейчас я не могу сказать это вживую, поэтому хочу написать. Спасибо тебе за то, что ты есть.</p>
+                    <p>Спасибо за то, что этот день я встречаю именно с тобой, любимая.</p>
+                    <p>Ты моя любимая бусинка ❤️</p>
+                </div>
+                <div class="signature">Love, Kuzma</div>
+            </div>
+
+        </div>
+    </div>
+
+    <audio id="bg-audio" src="cheri-cheri-lady-lyrics.mp3"></audio>
+
+    <script>
+        function openCard() {
+            const sunBtn = document.getElementById('sun-btn');
+            const introText = document.getElementById('intro-text');
+            const introScreen = document.getElementById('screen-intro');
+            const mainScreen = document.getElementById('screen-main');
+
+            // Запуск анимации расширения солнца
+            sunBtn.classList.add('clicked');
+            introText.style.opacity = '0';
+
+            // Переход к основному экрану
+            setTimeout(() => {
+                document.body.style.backgroundColor = 'var(--bg-main)';
+                introScreen.style.pointerEvents = 'none';
+                
+                setTimeout(() => {
+                    introScreen.style.display = 'none';
+                    mainScreen.classList.add('visible');
+                }, 400);
+            }, 600);
+        }
+
+        const audio = document.getElementById('bg-audio');
+        const playBtn = document.getElementById('play-btn');
+        let isPlaying = false;
+
+        function toggleAudio() {
+            if (isPlaying) {
+                audio.pause();
+                playBtn.innerHTML = '▶';
+            } else {
+                audio.play();
+                playBtn.innerHTML = '❚❚';
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
+</body>
+</html>
