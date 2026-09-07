@@ -47,14 +47,15 @@
 
         /* Контейнер отвечает за увеличение при клике */
         .sun-wrapper {
-            width: 140px;
-            height: 140px;
-            cursor: pointer;
-            position: relative;
-            z-index: 11;
-        }
+    		width: 180px; /* Было 140px */
+    		height: 180px; /* Было 140px */
+    		cursor: pointer;
+    		position: relative;
+    		z-index: 11;
+   		 background: radial-gradient(circle, rgba(255, 179, 71, 0.4) 20%, transparent 65%);
+	}
 
-        /* Круглое свечение позади картинки (убирает квадратную тень) */
+        
     
         /* Картинка отвечает за бесконечное вращение и скрытие белого фона */
         .sun-image {
@@ -78,15 +79,15 @@
         }
 
         .intro-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            color: var(--text-light);
-            margin-top: 40px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            opacity: 0;
-            animation: fadeIn 2s ease forwards 0.5s;
-        }
+    		font-family: 'Playfair Display', serif;
+    		font-size: 13px; /* Меньше кегль (было 18px) */
+   		color: var(--text-light);
+    		margin-top: 24px; /* Ближе к солнцу (было 40px) */
+   		letter-spacing: 6px; /* Больше воздуха между буквами (было 3px) */
+   		text-transform: uppercase;
+   		opacity: 0;
+    		animation: fadeIn 2s ease forwards 0.5s;
+	}	
 
         @keyframes fadeIn {
             to { opacity: 1; }
