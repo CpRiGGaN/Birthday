@@ -35,61 +35,55 @@
         }
 
         /* --- ЭКРАН 1: СОЛНЦЕ --- */
-#screen-intro {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-}
+        #screen-intro {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
 
-/* Контейнер отвечает за увеличение при клике */
-.sun-wrapper {
-    width: 140px;
-    height: 140px;
-    cursor: pointer;
-    position: relative;
-    z-index: 11;
-}
+        /* Контейнер отвечает за увеличение при клике */
+        .sun-wrapper {
+            width: 140px;
+            height: 140px;
+            cursor: pointer;
+            position: relative;
+            z-index: 11;
+        }
 
-/* Картинка отвечает за бесконечное вращение */
-.sun-image {
-    width: 100%;
-    height: 100%;
-    animation: spin 15s linear infinite;
-    filter: drop-shadow(0 0 20px rgba(255, 179, 71, 0.4)); /* Легкое свечение вокруг картинки */
-}
+        /* Круглое свечение позади картинки (убирает квадратную тень) */
+        .sun-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 15%; left: 15%; right: 15%; bottom: 15%;
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(255, 179, 71, 0.6);
+            z-index: -1;
+        }
 
-@keyframes spin {
-    100% { transform: rotate(360deg); }
-}
+        /* Картинка отвечает за бесконечное вращение и скрытие белого фона */
+        .sun-image {
+            width: 100%;
+            height: 100%;
+            animation: spin 15s linear infinite;
+            mix-blend-mode: multiply;
+        }
 
-.sun-wrapper.clicked {
-    animation: expandSun 1.2s cubic-bezier(0.64, 0.04, 0.35, 1) forwards;
-}
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
 
-@keyframes expandSun {
-    0% { transform: scale(1); }
-    100% { transform: scale(50); opacity: 0; }
-}
+        .sun-wrapper.clicked {
+            animation: expandSun 1.2s cubic-bezier(0.64, 0.04, 0.35, 1) forwards;
+        }
 
-/* Стили текста оставляем без изменений */
-.intro-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    color: var(--text-light);
-    margin-top: 40px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    opacity: 0;
-    animation: fadeIn 2s ease forwards 0.5s;
-}
-
-@keyframes fadeIn {
-    to { opacity: 1; }
-}
+        @keyframes expandSun {
+            0% { transform: scale(1); }
+            100% { transform: scale(50); opacity: 0; }
+        }
 
         .intro-text {
             font-family: 'Playfair Display', serif;
@@ -265,23 +259,12 @@
 <body>
 
     <!-- СЦЕНА 1: СОЛНЦЕ -->
-    <!-- СЦЕНА 1: СОЛНЦЕ -->
-<div id="screen-intro">
-    <div class="sun-wrapper" id="sun-btn" onclick="openCard()">
-        <svg class="sun-image" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-    		<circle cx="50" cy="50" r="20" fill="#FFC107"/>
-    		<path d="M50 15L53 25H47L50 15Z" fill="#FFC107"/>
-    		<path d="M50 85L47 75H53L50 85Z" fill="#FFC107"/>
-    		<path d="M85 50L75 47V53L85 50Z" fill="#FFC107"/>
-    		<path d="M15 50L25 53V47L15 50Z" fill="#FFC107"/>
-    		<path d="M75 25L68 32L64 28L75 25Z" fill="#FFC107"/>
-    		<path d="M25 75L32 68L36 72L25 75Z" fill="#FFC107"/>
-    		<path d="M75 75L64 72L68 68L75 75Z" fill="#FFC107"/>
-    		<path d="M25 25L36 28L32 32L25 25Z" fill="#FFC107"/>
-</svg>
+    <div id="screen-intro">
+        <div class="sun-wrapper" id="sun-btn" onclick="openCard()">
+            <img src="image_762bef.png" alt="Sun" class="sun-image">
+        </div>
+        <div class="intro-text" id="intro-text">For my sunshine</div>
     </div>
-    <div class="intro-text" id="intro-text">For my sunshine</div>
-</div>
 
     <!-- СЦЕНА 2: ПАНЕЛИ -->
     <div id="screen-main">
@@ -289,7 +272,6 @@
             
             <div class="panel panel-left">
                 <div class="photo-placeholder">
-                    <!-- Чтобы добавить фото, раскомментируй строку ниже и вставь путь к изображению -->
                     <!-- <img src="1.jpg" alt="Photo"> -->
                     Insert Photo
                 </div>
@@ -322,11 +304,9 @@
             const introScreen = document.getElementById('screen-intro');
             const mainScreen = document.getElementById('screen-main');
 
-            // Запуск анимации расширения солнца
             sunBtn.classList.add('clicked');
             introText.style.opacity = '0';
 
-            // Переход к основному экрану
             setTimeout(() => {
                 document.body.style.backgroundColor = 'var(--bg-main)';
                 introScreen.style.pointerEvents = 'none';
